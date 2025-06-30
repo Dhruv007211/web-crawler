@@ -1,0 +1,15 @@
+.text-neon {
+  color: #39ff14;
+  text-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14, 0 0 20px #39ff14;
+}
+
+.drop-shadow-neon {
+  filter: drop-shadow(0 0 15px #39ff14);
+}
+
+.neon-popup {
+  background-color: rgba(0, 255, 100, 0.05);
+  border: 1px solid #39ff14;
+  box-shadow: 0 0 15px #39ff14;
+  color: #aaffcc;
+}
