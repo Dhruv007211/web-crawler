@@ -5,6 +5,18 @@ from urllib.parse import urljoin, urlparse
 
 app = Flask(__name__)
 
+def extract_favicon(html, page_url):
+    try:
+        soup = BeautifulSoup(html, 'html.parser')
+        icon_link = soup.find("link", rel=lambda x: x and "icon" in x.lower())
+        if icon_link and icon_link.get("href"):
+            return urljoin(page_url, icon_link["href"])
+        # Fallback
+        parsed = urlparse(page_url)
+        return f"{parsed.scheme}://{parsed.netloc}/favicon.ico"
+    except:
+        return None
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -34,11 +46,11 @@ def crawl():
 
             try:
                 res = requests.get(link, timeout=3)
-                inner = BeautifulSoup(res.text, 'html.parser')
-                title = inner.title.string.strip() if inner.title else 'No title'
+                inner_html = res.text
+                inner_soup = BeautifulSoup(inner_html, 'html.parser')
+                title = inner_soup.title.string.strip() if inner_soup.title else 'No title'
 
-                domain = urlparse(link).netloc
-                favicon = f"https://{domain}/favicon.ico"
+                favicon = extract_favicon(inner_html, link)
 
                 links.append({
                     'url': link,

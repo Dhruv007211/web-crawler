@@ -37,14 +37,14 @@
   <!-- JS -->
   <script>
     function startCrawl() {
-      const url = document.getElementById('urlInput').value;
+      const url = document.getElementById('urlInput').value.trim();
       const results = document.getElementById('results');
       results.innerHTML = `<p class="text-cyan-400 animate-pulse">🔍 Crawling <b>${url}</b> ...</p>`;
 
       fetch('/crawl', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url })
+        body: JSON.stringify({ url })
       })
       .then(res => res.json())
       .then(data => {
@@ -62,10 +62,15 @@
 
             card.innerHTML = `
               <div class="flex items-center gap-3 mb-2">
-                <img src="${link.favicon}" alt="icon" class="w-6 h-6 rounded" onerror="this.src='/static/default-icon.png'">
+                <img 
+                  src="${link.favicon}" 
+                  alt="icon" 
+                  class="w-6 h-6 rounded border border-gray-700"
+                  onerror="this.src='/static/default-icon.png'"
+                >
                 <a href="${link.url}" target="_blank" class="text-lime-300 font-semibold hover:underline">${link.title}</a>
               </div>
-              <p class="text-sm text-gray-400">${link.url}</p>
+              <p class="text-sm text-gray-400 break-all">${link.url}</p>
             `;
 
             results.appendChild(card);
